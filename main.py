@@ -56,28 +56,42 @@ class ImportWindow:
     """
     A window to import CSV files.
     """
+
+    def __init__(self) -> None:
+        root = tk.Tk()
+        button = tk.Button(root, text='Import', command=self.upload)
+        button.pack()
+        root.mainloop()
     
-    def upload():
+    def upload(self):
         filename = filedialog.askopenfilename()
         print('Selected:', filename)
         with open(file=filename, mode="r") as csv_file:
             pexport.import_passwords(csv_file, database)
         print("Import successful.")
-    
-    root = tk.Tk()
-    button = tk.Button(root, text='Import', command=upload)
-    button.pack()
-
-    root.mainloop()
 
 class ExportWindow:
     """
     A window to export CSV files.
     """
-    #TODO
-    pass
+
+    def __init__(self) -> None:
+        self.root = tk.Tk()
+        self.label = tk.Label(self.root, text='Write the name of file')
+        self.label.pack()
+        self.entry = tk.Entry(self.root)
+        self.entry.pack()
+        self.button = tk.Button(self.root, text='Export', command=self.export)
+        self.button.pack()
+        self.root.mainloop()
+
+    def export(self):
+        filename = self.entry.get()
+        dir_name = filedialog.askdirectory() + f'\{filename}' + ".csv"
+        pexport.export_passwords(database, dir_name)
+        print("Export Successful.")
 
 if __name__ == "__main__":
     # Initializes and connects to the local SQLite Database.
     # database = Database()
-    import_window = ImportWindow()
+    export_window = ExportWindow()
