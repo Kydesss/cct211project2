@@ -1,8 +1,18 @@
-"""DO NOT TOUCH"""
+"""
+Creates a custom SQLite database with additional features.
+
+database.read_query reads the data in the database and returns a list[tuple].
+database.insert_password(entry: list) inserts a password entry as a list.
+database.delete_query(id: int) deletes a password in the database according to the id number.
+database.execute_query(query: str) executes an SQLite format query to change the database.
+
+"""
 
 import sqlite3
 import os
 from sqlite3 import Error
+
+# https://www.freecodecamp.org/news/connect-python-with-sql/
 
 class Database():
 

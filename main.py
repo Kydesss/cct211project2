@@ -77,21 +77,26 @@ class ExportWindow:
 
     def __init__(self) -> None:
         self.root = tk.Tk()
-        self.label = tk.Label(self.root, text='Write the name of file')
+        self.label = tk.Label(self.root, text='What do you want to name your file?')
         self.label.pack()
         self.entry = tk.Entry(self.root)
         self.entry.pack()
         self.button = tk.Button(self.root, text='Export', command=self.export)
         self.button.pack()
+        self.status_label = tk.Label(self.root, text='')
+        self.status_label.pack()
         self.root.mainloop()
 
     def export(self):
         filename = self.entry.get()
         dir_name = filedialog.askdirectory() + f'\{filename}' + ".csv"
         pexport.export_passwords(database, dir_name)
+        self.status_label.config(text="Export successful.")
         print("Export Successful.")
 
 if __name__ == "__main__":
     # Initializes and connects to the local SQLite Database.
     # database = Database()
-    export_window = ExportWindow()
+    # import_window = ImportWindow()
+    # export_window = ExportWindow()
+    pass
