@@ -8,6 +8,7 @@ import tkinter as tk
 from tkinter import filedialog # Import or export files.
 import random # Random password generator.
 import sqlite3 # Database.
+from hashlib import sha256 # Hashing passwords.
 
 # UI Windows
 
