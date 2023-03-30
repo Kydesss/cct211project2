@@ -4,6 +4,11 @@ Group 19: Joaquin Pacia, Ali Zaidi, Galad Dirie, Mohammed Ali
 """
 
 # Import modules
+import tkinter as tk
+from tkinter import filedialog # Import or export files.
+import random # Random password generator.
+import sqlite3 # Database.
+from hashlib import sha256 # Hashing passwords.
 
 import views as v # Views module
 from database import Database # SQLite database module
