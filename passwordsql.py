@@ -1,16 +1,17 @@
 """
 Creates a custom SQLite database with additional features.
 
-database.read_query reads the data in the database and returns a list[tuple].
-database.insert_password(entry: list) inserts a password entry as a list.
-database.delete_query(id: int) deletes a password in the database according to the id number.
-database.execute_query(query: str) executes an SQLite format query to change the database.
+Database.read_query reads the data in the database and returns a list[tuple].
+Database.insert_password(entry: list) inserts a password entry as a list.
+Database.delete_query(id: int) deletes a password in the database according to the id number.
+Database.execute_query(query: str) executes an SQLite format query to change the database.
 
 """
 
 import sqlite3
 import os
 from sqlite3 import Error
+import pgenerator as pg
 
 # https://www.freecodecamp.org/news/connect-python-with-sql/
 
@@ -25,7 +26,7 @@ class Database():
         try:
             with open(file="passwords.sql", mode="x"):
                 pass
-            print("Could not find files, creating new files..")
+            print("Could not find database, creating new database..")
         except:
             print("Existing files found..")
         directory = os.getcwd()
@@ -57,13 +58,14 @@ class Database():
         except Error as err:
             print(f"Error: '{err}'")
     
-    def insert_password(self, entry: list[str]):
+    def insert_password(self, entry: list[int, str, str, str]):
         """
         Inserts a password into the SQLite database.
+        entry: [id, url, username, password]
         """
         url = entry[1]
         username = entry[2]
-        password = entry[3]
+        password = pg.encrypt(entry[3])
         id = self.read_query()
         if id == []:
             id = 1

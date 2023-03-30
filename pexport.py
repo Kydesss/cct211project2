@@ -1,5 +1,6 @@
 import csv
 from passwordsql import Database
+import pgenerator as pg
 
 
 def import_passwords(passwords: csv, database: Database):
@@ -22,8 +23,12 @@ def export_passwords(database: Database, dir_name: str) -> csv:
     export = [['name', 'url', 'username', 'password']]
     for entry in read_database:
         single_entry = []
+        i = 0
         for col in entry:
+            if i == 3:
+                col = pg.decrypt(col)
             single_entry.append(col)
+            i += 1
         single_entry[0] = entry[1]
         export.append(single_entry)
     with open(file=dir_name, mode='w', newline='') as csv_file:

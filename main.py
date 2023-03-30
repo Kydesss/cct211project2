@@ -5,7 +5,7 @@ Group 19: Joaquin Pacia, Ali Zaidi, Galad Dirie
 
 # Import modules
 import tkinter as tk
-from tkinter import filedialog
+from tkinter import filedialog, StringVar
 import pexport # Import and export CSV module
 import pgenerator # Password generator module
 from passwordsql import Database # SQLite database module
@@ -17,8 +17,62 @@ class LoginWindow:
     """
     A window to login to the password manager.
     """
-    #TODO
-    pass
+    def __init__(self) -> None:
+        self.root = tk.Tk()
+        self.root.title("Login")
+        self.root.geometry("300x200")
+        self.root.resizable(False, False)
+        self.root.configure(bg="white")
+        self.label = tk.Label(self.root, text="Login", font=("Helvetica", 16), bg="white")
+        self.label.pack()
+        self.password_label = tk.Label(self.root, text="Password", font=("Helvetica", 12), bg="white")
+        self.password_label.pack()
+        self.password_entry = tk.Entry(self.root, borderwidth=0, fg="black", bg="grey", font=("Helvetica", 12))
+        self.password_entry.pack(pady=5)
+        self.status_label = tk.Label(self.root, text="", font=("Helvetica", 12), bg="white")
+        self.status_label.pack()
+        self.button = tk.Button(self.root, text='Login', command=self.login)
+        self.button.pack()
+        self.root.mainloop()
+        
+    
+    def login(self):
+        password = self.password_entry.get()
+        with open("master_password.txt", mode="r"):
+            if pgenerator.verify(password):
+                print("Login successful!")
+                self.root.destroy()
+                DashboardWindow()
+            else:
+                self.status_label.config(text="Wrong password!")
+
+class RegisterWindow:
+    """
+    A window to register a master password.
+    """
+    def __init__(self) -> None:
+        self.root = tk.Tk()
+        self.root.title("Register")
+        self.root.geometry("300x200")
+        self.root.resizable(False, False)
+        self.root.configure(bg="white")
+        self.label = tk.Label(self.root, text="Register", font=("Helvetica", 16), bg="white")
+        self.label.pack()
+        self.password_label = tk.Label(self.root, text="Password", font=("Helvetica", 12), bg="white")
+        self.password_label.pack()
+        self.password_entry = tk.Entry(self.root, borderwidth=0, fg="black", bg="grey", font=("Helvetica", 12))
+        self.password_entry.pack(pady=5)
+        self.button = tk.Button(self.root, text='Register', command=self.register)
+        self.button.pack()
+        self.root.mainloop()
+    
+    def register(self):
+        password = self.password_entry.get()
+        with open("master_password.txt", mode="w") as master_password:
+            master_password.write(pgenerator.hash(password))
+        self.root.destroy()
+        LoginWindow()
+    
 
 class DashboardWindow:
     """
@@ -47,8 +101,21 @@ class RandomPasswordGeneratorWindow:
     """
     A window to randomly generate a password.
     """
-    #TODO
-    pass
+
+    def __init__(self) -> None:
+        self.root = tk.Tk()
+        self.password_entry = tk.Entry(self.root, borderwidth=0, fg="black", bg="white", font=("Helvetica", 12))
+        self.password_entry.pack()
+        self.button = tk.Button(self.root, text='Generate', command=self.create_random_password)
+        self.button.pack()
+        self.root.mainloop()
+    
+    def create_random_password(self):
+        password = pgenerator.create_random_password()
+        data_string = StringVar()
+        data_string.set(password)
+        self.password_entry.config(textvariable=data_string)
+        
 
 # CSV Windows
 
@@ -99,4 +166,26 @@ if __name__ == "__main__":
     # database = Database()
     # import_window = ImportWindow()
     # export_window = ExportWindow()
-    pass
+    # random_password_generator_window = RandomPasswordGeneratorWindow()
+    # database.insert_password([1, 'https://google.com', 'username', 'password'])
+    # Check if master password exists.
+    try:
+        # Checks if there is a master password file.
+        with open("master_password.txt", mode="r") as master_password:
+            # Checks if the master password file is empty.
+            if master_password.read() == "":
+                # The file is empty, so there is no master password.
+                print("Master password does not exist.")
+                register_window = RegisterWindow()
+            else:
+                # The file probably has a master password, if not, the master password is corrupted.
+                login_window = LoginWindow()
+    except:
+        # The file does not exist, so there is no master password.
+        print("Master password does not exist.")
+        # Creates the master password file.
+        with open("master_password.txt", mode="x"):
+            pass
+        # Opens the register window.
+        register_window = RegisterWindow()
+    # pass
