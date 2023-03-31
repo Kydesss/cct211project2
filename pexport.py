@@ -13,7 +13,7 @@ def import_passwords(passwords: csv, database: Database):
         list_of_passwords.append(row)
     list_of_passwords.pop(0)
     for i in list_of_passwords:
-        database.insert_password(i)
+        database.append_password(i)
 
 def export_passwords(database: Database, dir_name: str) -> csv:
     """

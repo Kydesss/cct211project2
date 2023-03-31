@@ -1,17 +1,19 @@
 import random
 from hashlib import sha256
 
-base_string = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
+base_string = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()_+?./<>\'\"[];:{}'
 
 encryption_dict = {}
 for i in range(len(base_string) - 1):
-    encryption_dict[base_string[i]] = base_string[i+1]
+    encryption_dict[base_string[i]] = base_string[i + 1]
     encryption_dict['-'] = '-'
+    encryption_dict[':'] = ':'
 
 decryption_dict = {}
 for i in range(len(base_string) - 1):
-    decryption_dict[base_string[i+1]] = base_string[i]
+    decryption_dict[base_string[i + 1]] = base_string[i]
     decryption_dict['-'] = '-'
+    decryption_dict[':'] = ':'
 
 def create_random_password() -> str:
     """
