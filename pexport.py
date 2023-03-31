@@ -34,3 +34,23 @@ def export_passwords(database: Database, dir_name: str) -> csv:
     with open(file=dir_name, mode='w', newline='') as csv_file:
         csv_writer = csv.writer(csv_file)
         csv_writer.writerows(export)
+
+def export_passwords(database: Database) -> csv:
+    """
+    Exports passwords from SQLite database to a CSV file.
+    """
+    read_database = database.read_query()
+    export = [['name', 'url', 'username', 'password']]
+    for entry in read_database:
+        single_entry = []
+        i = 0
+        for col in entry:
+            if i == 3:
+                col = pg.decrypt(col)
+            single_entry.append(col)
+            i += 1
+        single_entry[0] = entry[1]
+        export.append(single_entry)
+    with open(file='passwords.csv', mode='w', newline='') as csv_file:
+        csv_writer = csv.writer(csv_file)
+        csv_writer.writerows(export)

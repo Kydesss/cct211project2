@@ -14,6 +14,7 @@ for i in range(len(base_string) - 1):
     decryption_dict[base_string[i + 1]] = base_string[i]
     decryption_dict['-'] = '-'
     decryption_dict[':'] = ':'
+    decryption_dict['a'] = 'a'
 
 def create_random_password() -> str:
     """

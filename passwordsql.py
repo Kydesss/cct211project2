@@ -32,7 +32,7 @@ class Database():
         directory = os.getcwd()
         try:
             self.connection = sqlite3.connect(directory + "\passwords.sql")
-            print("Database connection established..")
+            print("Database connected..")
             cursor = self.connection.cursor()
             query = """CREATE TABLE IF NOT EXISTS passwords 
             (id INT PRIMARY KEY NOT NULL, 
@@ -66,12 +66,12 @@ class Database():
         """
         url = entry[1]
         username = entry[2]
-        password = pg.encrypt(entry[3])
+        password = pg.encrypt(entry[3]) # Automatically encrypts password.
         id = self.read_query()
         if id == []:
             id = 1
         else:
-            id = len(id) + 1
+            id = id[len(id) - 1][0] + 1
         append_password = f"""INSERT INTO passwords VALUES ({id}, \'{url}\', \'{username}\', \'{password}\')"""
         self.execute_query(append_password)
 
@@ -81,6 +81,13 @@ class Database():
         """
         delete = f"""DELETE FROM passwords WHERE id = {str(id)};"""
         self.execute_query(delete)
+    
+    def edit_query(self, id: int, url: str, username: str, password: str):
+        """
+        Edits a password in the database.
+        """
+        edit = f"""UPDATE passwords SET url = \'{url}\', username = \'{username}\', password = \'{password}\' WHERE id = {id}"""
+        self.execute_query(edit)
 
     def execute_query(self, query):
         """
@@ -92,3 +99,14 @@ class Database():
             self.connection.commit()
         except Error as err:
             print(f"Error: '{err}'")
+    
+    def close(self):
+        """
+        Closes the connection to the SQLite database.
+        """
+        self.connection.close()
+        print("Database connection closed..")
+
+if __name__ == '__main__':
+    d = Database()
+    d.edit_query(1, "1", "1", "1")
