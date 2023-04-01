@@ -5,7 +5,7 @@ Database.read_query() reads the data in the database and returns a list[tuple], 
 Database.append_password(entry: list) appends a password entry as a list.
 Database.delete_query(id: int) deletes a password in the database according to the id number.
 Database.execute_query(query: str) executes an SQLite format query to change the database.
-
+Database.close() closes the connection to the database.
 """
 
 import sqlite3
@@ -19,7 +19,7 @@ class Database():
 
     def __init__(self) -> None:
         """
-        Initializes, formats, and connects local SQLite database file.
+        Initializes, formats, and connects a local SQLite database file.
         
         connection: Connection object to connect to SQL database for data retrival.
         """
@@ -106,7 +106,3 @@ class Database():
         """
         self.connection.close()
         print("Database connection closed..")
-
-if __name__ == '__main__':
-    d = Database()
-    d.edit_query(1, "1", "1", "1")
