@@ -118,7 +118,25 @@ if __name__ == "__main__":
         self.add_action("logout", self.end_time)
         self.save()
 
-   
+
+
+class Main:
+    """handles the main loop of the application
+    loads the database
+    loads the session manager
+    loads the login window
+    """
+
+    def __init__(self):
+        self.database = Database()
+        self.session = SessionManager()
+        self.login_window = LoginWindow(self)
+
+    def login(self, username, password):
+       ...
+    
+    def register(self, username, password):
+        ...
     
 
 if __name__ == "__main__":
