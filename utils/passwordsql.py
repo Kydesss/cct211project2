@@ -11,7 +11,7 @@ Database.execute_query(query: str) executes an SQLite format query to change the
 import sqlite3
 import os
 from sqlite3 import Error
-import pgenerator as pg
+import utils.pgenerator as pg
 
 # https://www.freecodecamp.org/news/connect-python-with-sql/
 
