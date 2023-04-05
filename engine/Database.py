@@ -13,6 +13,8 @@ class Database:
 
         self.connection = self.connect()
         print("Database formatted successfully..")
+        
+        self.close() # TEMP setup database
     
 
     def connect(self):
