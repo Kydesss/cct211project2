@@ -61,9 +61,8 @@ class SessionManager:
 
 class Main:
     """handles the main loop of the application
-    loads the database
-    loads the session manager
-    loads the login window
+    creates views and passes them the session manager
+
     """
 
     def __init__(self):
@@ -111,9 +110,23 @@ if __name__ == "__main__":
     #         pass
     #     # Opens the register window.
     #     register_window = RegisterWindow()
-    user = User(username="test1", password="test", role="admin")
-    user.create_table()
-    user.save()
 
+    init_models()
+    try:
+    
+        user = User(username="test1", password="test", role="admin")
+        user.save()
+    except:
+        pass
+        
     new_user = User.get_all()
+
+    # add activity log
+    activity_log = ActivityLog(user_id=1, action="login", timestamp=datetime.now())
+    activity_log.save()
+
+    #activity window
+    activity_log_window = ActivityLogWindow()
+
+    
     print(new_user)
