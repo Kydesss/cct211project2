@@ -28,6 +28,8 @@ class ActivityLog(Model):
         """Returns all activity logs with username instead of user_id"""
         query = """SELECT activity_logs.id, users.username, activity_logs.action, activity_logs.timestamp
                    FROM activity_logs
-                   JOIN users ON activity_logs.user_id = users.id"""
+                   JOIN users ON activity_logs.user_id = users.id
+                   ORDER BY activity_logs.id DESC
+                   """
         result = cls._execute_query(query)
         return result
