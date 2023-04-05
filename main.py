@@ -14,7 +14,11 @@ from views import *
 
 
 
-# Initialize global database.
+#initlize models
+def init_models():
+    User.create_table()
+    PasswordEntry.create_table()
+    ActivityLog.create_table()
 
  
 class SessionManager:
