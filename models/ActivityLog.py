@@ -17,8 +17,8 @@ class ActivityLog(Model):
         query = """CREATE TABLE IF NOT EXISTS activity_logs (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER,
-            action text,
-            timestamp text,
+            action TEXT,
+            timestamp DATETIME,
             FOREIGN KEY (user_id) REFERENCES users (id)
         )"""
         cls._execute_query(query)
