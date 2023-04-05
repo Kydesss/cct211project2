@@ -11,7 +11,8 @@ Database.close() closes the connection to the database.
 import sqlite3
 import os
 from sqlite3 import Error
-import pgenerator as pg
+import utils as ut
+import csv
 
 # https://www.freecodecamp.org/news/connect-python-with-sql/
 
@@ -66,7 +67,7 @@ class Database():
         """
         url = entry[1]
         username = entry[2]
-        password = pg.encrypt(entry[3]) # Automatically encrypts password.
+        password = ut.encrypt(entry[3]) # Automatically encrypts password.
         id = self.read_query()
         if id == []:
             id = 1
@@ -100,6 +101,38 @@ class Database():
         except Error as err:
             print(f"Error: '{err}'")
     
+    def import_passwords(self, passwords: csv):
+        """
+        Imports CSV password files from Chrome or Edge.
+        """
+        csv_reader = csv.reader(passwords)
+        list_of_passwords = []
+        for row in csv_reader:
+            list_of_passwords.append(row)
+        list_of_passwords.pop(0)
+        for i in list_of_passwords:
+            self.append_password(i)
+    
+    def export_passwords(self) -> csv:
+        """
+        Exports passwords from SQLite database to a CSV file.
+        """
+        read_database = self.read_query()
+        export = [['name', 'url', 'username', 'password']]
+        for entry in read_database:
+            single_entry = []
+            i = 0
+            for col in entry:
+                if i == 3:
+                    col = ut.decrypt(col)
+                single_entry.append(col)
+                i += 1
+            single_entry[0] = entry[1]
+            export.append(single_entry)
+        with open(file='passwords.csv', mode='w', newline='') as csv_file:
+            csv_writer = csv.writer(csv_file)
+            csv_writer.writerows(export)
+        
     def close(self):
         """
         Closes the connection to the SQLite database.
