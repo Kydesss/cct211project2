@@ -1,6 +1,6 @@
 import csv
-from passwordsql import Database
-import pgenerator as pg
+from engine import Database
+import utils.pgenerator as pg
 
 
 def import_passwords(passwords: csv, database: Database):
@@ -13,13 +13,13 @@ def import_passwords(passwords: csv, database: Database):
         list_of_passwords.append(row)
     list_of_passwords.pop(0)
     for i in list_of_passwords:
-        database.append_password(i)
+        database.add_password(i)
 
 def export_passwords(database: Database, dir_name: str) -> csv:
     """
     Exports passwords from SQLite database to a CSV file.
     """
-    read_database = database.read_query()
+    read_database = database.get_all_passwords()
     export = [['name', 'url', 'username', 'password']]
     for entry in read_database:
         single_entry = []
