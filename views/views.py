@@ -177,5 +177,5 @@ class ActivityLogWindow:
 
     def get_activity_log(self):
         #return list of tuples (action, timestamp)
-        return database.activity_log_table.get_activity_log()
+        return ActivityLog.get_logs()
     
