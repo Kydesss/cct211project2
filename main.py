@@ -17,7 +17,7 @@ from views import *
 # Initialize global database.
 
  
-class Session:
+class SessionManager:
     def __init__(self):
         self.user = None
         self.actions = []
@@ -100,8 +100,7 @@ if __name__ == "__main__":
 
     def start(self):
         self.start_time = datetime.now()
-        # add session to session table
-        database.session_table.add_session(self.start_time, self.ip_address, self.device_info)
+        Session.create(user_id=self.user.id, start_time=self.start_time, ip_address=self.ip_address, device_info=self.device_info)
 
     def set_user(self, user):
         self.user = user
