@@ -33,3 +33,13 @@ class ActivityLog(Model):
                    """
         result = cls._execute_query(query)
         return result
+    
+    @classmethod
+    def add_action(cls, user_id, action):
+        """Adds an action to the activity log"""
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        query = f"""INSERT INTO activity_logs (user_id, action, timestamp)
+            VALUES ({user_id}, '{action}', '{timestamp}')
+        """
+        cls._execute_query(query)
+        return cls(user_id=user_id, action=action, timestamp=timestamp)
