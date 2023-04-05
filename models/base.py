@@ -8,7 +8,6 @@ import sqlite3
 class Model:
     """Base class for all models, acts as an interface for all models
     """
-
     db_name = "db.sql"
     table_name = None
     
@@ -88,6 +87,9 @@ class Model:
         self._execute_query(query, parameters)
   
     def save(self, *args, **kwargs):
+        # NOTE: should we handle save method in child classes? probably not but i dont like _insert and _update methods atm
+        # also dont like the fact that we assume self.id and that self.id is the primary key
+        # TODO: Find a better way to handle this
         if not self.id:
             self._insert()
         else:
