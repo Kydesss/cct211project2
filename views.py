@@ -1,8 +1,27 @@
+"""
+Views for the password manager.
+
+Classes:
+    LoginWindow: A window to login to the password manager.
+    RegisterWindow: A window to register a master password.
+    MainWindow: The main window of the password manager.
+    PasswordWindow: A window to add a password to the database.
+    RandomPasswordGeneratorWindow: A window to generate a random password.
+    ExportWindow: A window to export the database to a CSV file.
+    ImportWindow: A window to import a CSV file to the database.
+"""
+
 import tkinter as tk
 from tkinter import ttk, filedialog
 from database import Database
+import os
+from log import Log
 import utils as ut
 import pandas as pd
+
+# Global variables
+
+directory = os.getcwd()
 
 # Login and register windows.
 
@@ -10,13 +29,14 @@ class RegisterWindow:
     """
     A window to register a master password.
     """
-    def __init__(self, database: Database) -> None:
+    def __init__(self, database: Database, log: Log) -> None:
         """
         Creates a window to register a master password.
         """
         self.root = tk.Tk()
         self.root.title("Register")
         self.database = database
+        self.log = log
         self.label = tk.Label(self.root, text = "Register")
         self.label.pack()
         self.password_label = tk.Label(self.root, text = "Password")
@@ -32,23 +52,25 @@ class RegisterWindow:
         Registers a master password.
         """
         password = self.password_entry.get()
-        with open("master_password.txt", mode = "w") as master_password:
+        with open(file = directory + "\data\master_password.txt", mode = "w") as master_password:
             master_password.write(ut.hash(password))
         self.root.destroy()
         print("Registration successful!")
-        LoginWindow(self.database)
+        self.log.log('Registration successful')
+        LoginWindow(self.database, self.log)
 
 class LoginWindow:
     """
     A window to login to the password manager.
     """
-    def __init__(self, database: Database) -> None:
+    def __init__(self, database: Database, log: Log) -> None:
         """
         Creates a window to login to the password manager.
         """
         self.root = tk.Tk()
         self.root.title("Login")
         self.database = database
+        self.log = log
         self.label = tk.Label(self.root, text = "Login")
         self.label.pack()
         self.password_label = tk.Label(self.root, text = "Password")
@@ -66,12 +88,14 @@ class LoginWindow:
         Logs in to the password manager.
         """
         password = self.password_entry.get()
-        with open("master_password.txt", mode = "r"):
+        with open(file = directory + "\data\master_password.txt", mode = "r"):
             if ut.verify(password):
                 self.root.destroy()
                 print("Login successful!")
-                PasswordWindow(self.database)
+                self.log.log('Login successful')
+                PasswordWindow(self.database, self.log)
             else:
+                self.log.log('Wrong password')
                 self.status_label.config(text = "Wrong password!")
 
 # Password Windows
@@ -80,10 +104,11 @@ class PasswordWindow:
     """
     A window to display list of passwords using a TreeView.
     """
-    def __init__(self, database: Database) -> None:
+    def __init__(self, database: Database, log: Log) -> None:
         self.root = tk.Tk()
         self.root.title("Password Manager")
         self.database = database
+        self.log = log
         self.menu = tk.Menu(self.root, tearoff = 0)
         self.menu.add_command(label = "Add Password", command = self.add_password)
         self.menu.add_command(label = "Edit Password", command = self.edit_password)
@@ -132,14 +157,19 @@ class PasswordWindow:
         selected = self.tree.selection()[0]
         entry = self.tree.item(selected, "values")
         id = entry[0]
+        url = entry[1]
+        username = entry[2]
+        password = entry[3]
         self.database.delete_query(id)
         self.refresh_tree()
         print("Password deleted. " + str(entry))
+        self.log.log("Deleted password ", url, username, password)
     
     def generate_password(self) -> None:
         """
         Opens a window to generate a password.
         """
+        self.log.log("Opened password generator")
         RandomPasswordGeneratorWindow()
     
     def import_passwords(self) -> None:
@@ -152,6 +182,8 @@ class PasswordWindow:
             self.database.import_passwords(csv_file)
         self.refresh_tree()
         print("Import successful.")
+        action = "Imported passwords from " + filename
+        self.log.log(action)
 
     def export_passwords(self) -> None:
         """
@@ -165,6 +197,8 @@ class PasswordWindow:
         defaultextension=".csv", filetypes=[("csv file","*.csv*")])
         df.to_csv(filename, sep = ",", index = False)
         print("Export successful.")
+        action = "Exported passwords to " + filename.name
+        self.log.log(action)
     
     def sign_out(self) -> None:
         """
@@ -172,7 +206,8 @@ class PasswordWindow:
         """
         self.root.destroy()
         print("Signed out successfully!")
-        LoginWindow()
+        self.log.log("Signed out")
+        LoginWindow(self.database, self.log)
     
     def refresh_tree(self) -> None:
         """
@@ -214,10 +249,15 @@ class AddPasswordWindow:
         """
         Adds the password to the database.
         """
-        self.parent.database.append_password([0, self.url_entry.get(), self.username_entry.get(), self.password_entry.get()]) # Append the password to the database.
+        url = self.url_entry.get()
+        username = self.username_entry.get()
+        password = self.password_entry.get()
+        self.parent.database.append_password([0, url, username, password]) # Append the password to the database.
+        self.parent.log.log("Added password for ", url, username, password)
         self.parent.refresh_tree() # Refresh the tree.
         self.root.destroy()
         print("Password added.")
+        
 
 class EditPasswordWindow:
     """
@@ -265,9 +305,11 @@ class EditPasswordWindow:
         username = self.username_entry.get()
         password = self.password_entry.get()
         self.parent.database.edit_query(id, url, username, ut.encrypt(password)) # Edit the password in the database.
+        self.parent.log.log("Edited password ", url, username, password)
         self.parent.refresh_tree() # Refresh the tree.
         self.root.destroy()
         print("Password edited.")
+        
 
 # Random Password Generator Window
 

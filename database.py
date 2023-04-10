@@ -24,15 +24,16 @@ class Database():
         
         connection: Connection object to connect to SQL database for data retrival.
         """
+        directory = os.getcwd()
         try:
-            with open(file="passwords.sql", mode="x"):
+            with open(file=directory + "\data\passwords.sql", mode="x"):
                 pass
             print("Could not find database, creating new database..")
         except:
             print("Existing files found..")
-        directory = os.getcwd()
+        
         try:
-            self.connection = sqlite3.connect(directory + "\passwords.sql")
+            self.connection = sqlite3.connect(directory + "\data\passwords.sql")
             print("Database connected..")
             cursor = self.connection.cursor()
             query = """CREATE TABLE IF NOT EXISTS passwords 

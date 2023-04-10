@@ -1,6 +1,20 @@
+"""
+This file contains all the functions that are used in the main.py file.
+
+Functions:
+    create_random_password() -> str - Creates a random password which uses a total of 15 characters with dashes (-) between 5.
+    encrypt(password: str) -> str - Encrypts 'password' using our custom encryption algorithm.
+    decrypt(password: str) -> str - Decrypts 'password' using our custom encryption algorithm.
+    hash_password(password: str) -> str - Hashes 'password' using SHA256.
+    verify(password: str) -> bool - Verifies if 'password' matches 'hashed_password'.
+
+"""
+
 import random
 from hashlib import sha256
+import os
 
+directory = os.getcwd()
 BASE_STRING = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()_+?./<>\'\"[];:{}'
 
 encryption_dict = {}
@@ -54,10 +68,10 @@ def hash(master_password: str) -> sha256:
     """
     return sha256(master_password.encode('utf-8')).hexdigest()
 
-def verify(master_password: str) -> bool:
+def verify(password: str) -> bool:
     """
     Checks if sha256('master_password') is the same as the locally stored master_password.
     """
-    with open('master_password.txt', 'r') as f:
-        stored_master_password = f.read()
-    return hash(master_password) == stored_master_password
+    with open(file = directory + "\data\master_password.txt", mode='r') as f:
+        master_password = f.read()
+    return hash(password) == master_password
