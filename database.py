@@ -74,8 +74,12 @@ class Database():
             id = 1
         else:
             id = id[len(id) - 1][0] + 1
+            
+        # insert_statement = ("INSERT INTO passwords (id, url, username, password)" "VALUES (%s, %s, %s, %s)")
+        # data = [id, url, username, password]
         append_password = f"""INSERT INTO passwords VALUES ({id}, \'{url}\', \'{username}\', \'{password}\')"""
         self.execute_query(append_password)
+        # self.execute_query(insert_statement, data)
 
     def delete_query(self, id: int):
         """
@@ -91,7 +95,7 @@ class Database():
         edit = f"""UPDATE passwords SET url = \'{url}\', username = \'{username}\', password = \'{password}\' WHERE id = {id}"""
         self.execute_query(edit)
 
-    def execute_query(self, query):
+    def execute_query(self, query: str):
         """
         Commits queries to the SQLite database
         """

@@ -13,22 +13,23 @@ Functions:
 import random
 from hashlib import sha256
 import os
+from cryptography.fernet import Fernet
+from base64 import b64encode, b64decode # Base64 module
+
+# Global variables
 
 directory = os.getcwd()
 BASE_STRING = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()_+?./<>\'\"[];:{}'
 
-encryption_dict = {}
-for i in range(len(BASE_STRING) - 1):
-    encryption_dict[BASE_STRING[i]] = BASE_STRING[i + 1]
-    encryption_dict['-'] = '-'
-    encryption_dict[':'] = ':'
+# Create encryption key
 
-decryption_dict = {}
-for i in range(len(BASE_STRING) - 1):
-    decryption_dict[BASE_STRING[i + 1]] = BASE_STRING[i]
-    decryption_dict['-'] = '-'
-    decryption_dict[':'] = ':'
-    decryption_dict['a'] = 'a'
+try:
+    with open(file=directory + "\data\key.txt", mode='rb') as binary_file:
+        KEY = binary_file.read()
+except:
+    with open(file=directory + "\data\key.txt", mode='wb') as binary_file:
+        KEY = Fernet.generate_key()
+        binary_file.write(KEY)
 
 def create_random_password() -> str:
     """
@@ -48,19 +49,18 @@ def encrypt(password: str) -> str:
     """
     Encrypts 'password' using our custom encryption algorithm.
     """
-    encrypted_string = ''
-    for char in password:
-        encrypted_string += encryption_dict[char]
-    return encrypted_string
+    f = Fernet(KEY)
+    encoded = b64encode(f.encrypt(bytes(password, "utf-8"))).decode()
+    return encoded
 
 def decrypt(password: str) -> str:
     """
     Decrypts 'password' using our custom encryption algorithm.
     """
-    decrypted_string = ''
-    for char in password:
-        decrypted_string += decryption_dict[char]
-    return decrypted_string
+    f = Fernet(KEY)
+    password = b64decode(password)
+    password = f.decrypt(password).decode()
+    return password
 
 def hash(master_password: str) -> sha256:
     """
