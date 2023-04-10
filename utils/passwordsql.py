@@ -12,6 +12,7 @@ import sqlite3
 import os
 from sqlite3 import Error
 import utils.pgenerator as pg
+from passwordEncrypt import passwordM
 
 # https://www.freecodecamp.org/news/connect-python-with-sql/
 
@@ -64,15 +65,17 @@ class Database():
         Inserts a password into the SQLite database.
         entry: [id, url, username, password]
         """
+        pm = passwordM()
         url = entry[1]
         username = entry[2]
-        password = pg.encrypt(entry[3])
+        password = pm.encrypt(entry[3])
+        print(password)
         id = self.read_query()
         if id == []:
             id = 1
         else:
             id = len(id) + 1
-        append_password = f"""INSERT INTO passwords VALUES ({id}, \'{url}\', \'{username}\', \'{password}\')"""
+        append_password = f"""INSERT INTO passwords VALUES ({id}, \'{url}\', \'{username}\', \'{password}')"""
         self.execute_query(append_password)
 
     def delete_query(self, id: int):

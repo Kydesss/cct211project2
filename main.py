@@ -20,6 +20,7 @@ def init_models():
     PasswordEntry.create_table()
     ActivityLog.create_table()
 
+from passwordEncrypt import passwordM
  
 class SessionManager:
     def __init__(self):
@@ -174,6 +175,24 @@ if __name__ == "__main__":
     #         pass
     #     # Opens the register window.
     #     register_window = RegisterWindow()
+
+    # path = input("enter ur path")
+    # pe.create(path + ".key")
+    
+    # pm = passwordM()
+    # print(pm.encrypt("ilikecats"))
+    # print(pm.decrypt("ilikecats"))
+    # x = input("filename")
+    # nf = x + ".key"
+    # pm.create(nf)
+    # key = pm.find_key(nf)
+    # print(pm.find_key(nf) ,"hello")
+    # ep = pm.encrypt_in_file("ilike cats", key)
+    # dp = pm.decrypt_in_file("ilike cats", key)
+    # print(ep, "encrypted")
+    # print(dp, "decrypted")
+    database.append_password([1, 'https://google.com', 'username', 'password'])
+    main()
     pass
     user = User(username="test1", password="test", role="admin")
     user.create_table()
