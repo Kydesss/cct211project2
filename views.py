@@ -95,7 +95,7 @@ class LoginWindow:
                 self.log.log('Login successful')
                 PasswordWindow(self.database, self.log)
             else:
-                self.log.log('Wrong password')
+                self.log.log('Wrong login password')
                 self.status_label.config(text = "Wrong password!")
 
 # Password Windows
@@ -117,6 +117,8 @@ class PasswordWindow:
         self.menu.add_command(label = "Import Passwords", command = self.import_passwords)
         self.menu.add_command(label = "Export Passwords", command = self.export_passwords)
         self.menu.add_separator()
+        self.menu.add_command(label = "View Activity Log", command = self.view_log)
+        self.menu.add_command(label = "Delete All Passwords", command = self.delete_all_passwords)
         self.menu.add_command(label = "Sign Out", command = self.sign_out)
         self.menu.add_command(label = "Exit", command = self.root.destroy)
         self.tree = ttk.Treeview(self.root)
@@ -165,6 +167,14 @@ class PasswordWindow:
         print("Password deleted. " + str(entry))
         self.log.log("Deleted password for", url, username, password)
     
+    def delete_all_passwords(self) -> None:
+        """
+        Deletes all passwords from the database.
+        """
+        DeletePasswordWindow(self)
+        
+        
+    
     def generate_password(self) -> None:
         """
         Opens a window to generate a password.
@@ -199,6 +209,13 @@ class PasswordWindow:
         print("Export successful.")
         action = "Exported passwords to " + filename.name
         self.log.log(action)
+    
+    def view_log(self) -> None:
+        """
+        Opens a window to view the activity log.
+        """
+        self.log.log("Opened activity log")
+        LogWindow(self.log)
     
     def sign_out(self) -> None:
         """
@@ -308,8 +325,34 @@ class EditPasswordWindow:
         self.parent.log.log("Edited password for", url, username, password)
         self.parent.refresh_tree() # Refresh the tree.
         self.root.destroy()
-        print("Password edited.")
-        
+        print("Password edited.")    
+
+class DeletePasswordWindow:
+    """
+    A window to delete a password.
+    """
+    def __init__(self, parent: PasswordWindow) -> None:
+        """
+        Initializes the window.
+        """
+        self.root = tk.Tk()
+        self.root.title("Delete All Passwords")
+        self.parent = parent
+        self.label = tk.Label(self.root, text = "Are you sure you want to delete all passwords?")
+        self.label.pack()
+        self.button = tk.Button(self.root, text = 'Delete', command = self.delete)
+        self.button.pack()
+        self.root.mainloop()
+    
+    def delete(self):
+        """
+        Deletes all passwords.
+        """
+        self.parent.database.execute_query("DELETE FROM passwords")
+        self.parent.refresh_tree()
+        print("All passwords deleted.")
+        self.parent.log.log("Deleted all passwords")
+        self.root.destroy()
 
 # Random Password Generator Window
 
@@ -338,3 +381,35 @@ class RandomPasswordGeneratorWindow:
         self.password_entry.delete(1.0, tk.END)
         self.password_entry.insert(1.0, password)
         print("Password generated.")
+
+# Log Window
+
+class LogWindow:
+    """
+    A window to view the activity log.
+    """
+    def __init__(self, log: Log) -> None:
+        """
+        Initializes the window.
+        """
+        self.root = tk.Tk()
+        self.root.title("Activity Log")
+        self.log = log
+        self.tree = ttk.Treeview(self.root)
+        self.tree["columns"] = ("action", "timestamp")
+        self.tree.column("#0", width = 0, stretch = tk.NO)
+        self.tree.column("action", anchor = tk.W, width = 400)
+        self.tree.column("timestamp", anchor = tk.W, width = 150)
+        self.tree.heading("#0", text = "id", anchor = tk.W)
+        self.tree.heading("action", text = "Action", anchor = tk.W)
+        self.tree.heading("timestamp", text = "Timestamp", anchor = tk.W)
+        self.tree.pack()
+        self.add_log()
+        self.root.mainloop()
+    
+    def add_log(self):
+        """
+        Adds the log to the window.
+        """
+        for i in reversed(self.log.read_log()):
+            self.tree.insert("", tk.END, values = (i[0], i[1]))

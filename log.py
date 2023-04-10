@@ -9,7 +9,6 @@ import sqlite3
 import os
 from sqlite3 import Error
 import datetime
-import utils as ut
 
 class Log():
 
@@ -44,6 +43,18 @@ class Log():
         try:
             cursor.execute(query)
             self.connection.commit()
+        except Error as err:
+            print(f"Error: '{err}'")
+    
+    def read_log(self) -> list[tuple]:
+        """
+        Reads the log.
+        """
+        cursor = self.connection.cursor()
+        query = "SELECT * FROM log;"
+        try:
+            cursor.execute(query)
+            return cursor.fetchall()
         except Error as err:
             print(f"Error: '{err}'")
     
