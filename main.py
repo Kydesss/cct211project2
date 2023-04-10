@@ -10,6 +10,7 @@ from tkinter import filedialog, StringVar, ttk
 import pexport as pe # Import and export CSV module
 import pgenerator as pg# Password generator module
 from passwordsql import Database # SQLite database module
+from passwordEncrypt import passwordM
 
 # Initialize global database.
 
@@ -156,6 +157,7 @@ if __name__ == "__main__":
     # import_window = ImportWindow()
     # export_window = ExportWindow()
     # random_password_generator_window = RandomPasswordGeneratorWindow()
+<<<<<<< Updated upstream
     # database.append_password([1, 'https://google.com', 'username', 'password'])
     
     # Check if master password exists.
@@ -178,4 +180,24 @@ if __name__ == "__main__":
     #         pass
     #     # Opens the register window.
     #     register_window = RegisterWindow()
+=======
+
+    # path = input("enter ur path")
+    # pe.create(path + ".key")
+    
+    # pm = passwordM()
+    # print(pm.encrypt("ilikecats"))
+    # print(pm.decrypt("ilikecats"))
+    # x = input("filename")
+    # nf = x + ".key"
+    # pm.create(nf)
+    # key = pm.find_key(nf)
+    # print(pm.find_key(nf) ,"hello")
+    # ep = pm.encrypt_in_file("ilike cats", key)
+    # dp = pm.decrypt_in_file("ilike cats", key)
+    # print(ep, "encrypted")
+    # print(dp, "decrypted")
+    database.append_password([1, 'https://google.com', 'username', 'password'])
+    main()
+>>>>>>> Stashed changes
     pass

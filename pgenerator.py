@@ -1,19 +1,6 @@
 import random
 from hashlib import sha256
-
-base_string = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()_+?./<>\'\"[];:{}'
-
-encryption_dict = {}
-for i in range(len(base_string) - 1):
-    encryption_dict[base_string[i]] = base_string[i + 1]
-    encryption_dict['-'] = '-'
-    encryption_dict[':'] = ':'
-
-decryption_dict = {}
-for i in range(len(base_string) - 1):
-    decryption_dict[base_string[i + 1]] = base_string[i]
-    decryption_dict['-'] = '-'
-    decryption_dict[':'] = ':'
+from cryptography.fernet import Fernet
 
 def create_random_password() -> str:
     """
@@ -28,24 +15,6 @@ def create_random_password() -> str:
             password += base_string[random.randint(0, len(base_string) - 1)]
         i += 1
     return password
-
-def encrypt(password: str) -> str:
-    """
-    Encrypts 'password' using our custom encryption algorithm.
-    """
-    encrypted_string = ''
-    for char in password:
-        encrypted_string += encryption_dict[char]
-    return encrypted_string
-
-def decrypt(password: str) -> str:
-    """
-    Decrypts 'password' using our custom encryption algorithm.
-    """
-    decrypted_string = ''
-    for char in password:
-        decrypted_string += decryption_dict[char]
-    return decrypted_string
 
 def hash(master_password: str) -> sha256:
     """
