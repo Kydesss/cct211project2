@@ -163,7 +163,7 @@ class PasswordWindow:
         self.database.delete_query(id)
         self.refresh_tree()
         print("Password deleted. " + str(entry))
-        self.log.log("Deleted password ", url, username, password)
+        self.log.log("Deleted password for", url, username, password)
     
     def generate_password(self) -> None:
         """
@@ -253,7 +253,7 @@ class AddPasswordWindow:
         username = self.username_entry.get()
         password = self.password_entry.get()
         self.parent.database.append_password([0, url, username, password]) # Append the password to the database.
-        self.parent.log.log("Added password for ", url, username, password)
+        self.parent.log.log("Added password for", url, username, password)
         self.parent.refresh_tree() # Refresh the tree.
         self.root.destroy()
         print("Password added.")
@@ -305,7 +305,7 @@ class EditPasswordWindow:
         username = self.username_entry.get()
         password = self.password_entry.get()
         self.parent.database.edit_query(id, url, username, ut.encrypt(password)) # Edit the password in the database.
-        self.parent.log.log("Edited password ", url, username, password)
+        self.parent.log.log("Edited password for", url, username, password)
         self.parent.refresh_tree() # Refresh the tree.
         self.root.destroy()
         print("Password edited.")

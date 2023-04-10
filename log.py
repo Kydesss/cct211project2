@@ -9,6 +9,7 @@ import sqlite3
 import os
 from sqlite3 import Error
 import datetime
+import utils as ut
 
 class Log():
 
@@ -37,7 +38,7 @@ class Log():
         Logs an action to the SQLite database.
         """
         if url != None and username != None and password != None:
-            action = f"{action} {url} {username} {password}"
+            action = f"{action} {url}"
         cursor = self.connection.cursor()
         query = f"INSERT INTO log VALUES ('{action}', '{datetime.datetime.today().replace(microsecond=0)}');"
         try:
