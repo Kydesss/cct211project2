@@ -13,8 +13,9 @@ class Database:
 
         self.connection = self.connect()
         print("Database formatted successfully..")
+
+        self.close() #NOTE: This is here to close the connection to the database after formatting it. TEMPORARY FIX
         
-        self.close() # TEMP setup database
     
 
     def connect(self):

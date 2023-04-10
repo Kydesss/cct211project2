@@ -73,6 +73,11 @@ class Model:
         query = f"DELETE FROM {cls.table_name} WHERE {conditions}"
         cls._execute_query(query, tuple(kwargs.values()))
     
+    @classmethod
+    def delete_all(cls):
+        query = f"DELETE FROM {cls.table_name}"
+        cls._execute_query(query)
+    
     def _insert(self, *args, **kwargs):
         columns = ", ".join(self.__dict__.keys())
         values = ", ".join(["?"] * len(self.__dict__))

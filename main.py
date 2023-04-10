@@ -2,44 +2,19 @@
 CCT211 Project 2: Password Manager
 Group 19: Joaquin Pacia, Ali Zaidi, Galad Dirie
 """
+import os
 import uuid
 import socket
 import platform
 from datetime import datetime 
 
+from utils.passwordEncrypt import passwordM
 
 from engine import Database
 from models import *
 from views import *
 
 
-
-#initlize models
-def init_models():
-    User.create_table()
-    PasswordEntry.create_table()
-    ActivityLog.create_table()
-
-from passwordEncrypt import passwordM
- 
-class SessionManager:
-    def __init__(self):
-        self.user = None
-        self.actions = []
-        self.start_time = datetime.now()
-        self.end_time = None
-        self.ip_address = self._get_ip_address()
-        self.device_info = self._get_device_info()
-        
-    def _get_ip_address(self):
-        hostname = socket.gethostname()
-        ip_address = socket.gethostbyname(hostname)
-        return ip_address
-
-import views as v # Views module
-from database import Database # SQLite database module
-import os # OS module
-from log import Log # Activity log module
 
 def main():
     """
@@ -49,27 +24,27 @@ def main():
     # Check if master password exists.
     try:
         # Checks if there is a master password file.
-        with open(file=directory + "\data\master_password.txt", mode = "r") as master_password:
+        with open("./data/master_password.txt", mode = "r") as master_password:
             # Checks if the master password file is empty.
             if master_password.read() == "":
                 # The file is empty, so there is no master password.
                 print("Master password does not exist.")
-                v.RegisterWindow(database, log)
-                log.log('Register window opened')
+                RegisterWindow()
+                ActivityLog.log(action="View register window")
             else:
                 # The file probably has a master password, if not, the master password is corrupted.
-                log.log('Login attempt')
-                v.LoginWindow(database, log)
+                ActivityLog.log(action="View login window")
+                LoginWindow()
     except:
         # The file does not exist, so there is no master password.
         print("Master password does not exist.")
         # Creates the master password file.
-        with open(file=directory + "\data\master_password.txt", mode = "x"):
-            log.log('Master password file created')
+        with open("./data/master_password.txt", mode = "x"):
+            ActivityLog.log(action='Master password file created')
         # Opens the register window.
         print("Register window opened.")
-        log.log('Register window opened')
-        v.RegisterWindow(database, log)
+        ActivityLog.log(action='Register window opened')
+        RegisterWindow()
 
 if __name__ == "__main__":
     # Testing windows (comment out when done testing)
@@ -81,139 +56,18 @@ if __name__ == "__main__":
     # database.append_password([1, 'https://google.com', 'username', 'password'])
 
     # Main program
-    log = Log()
     database = Database()
+    PasswordVault.create_table()
+    ActivityLog.create_table()
+    #ADD SOME TEST DATA for activity log and password vault
+
+    PasswordVault.add_password(username="Galad", password="Password", url="test.com")
+    ActivityLog.log(action="test")
+    ActivityLog.log(action="test2")
+
     main()
     database.close()
-    log.close()
-    def __init__(self) -> None:
-        self.root = tk.Tk()
-        self.root.title("Login")
-        self.label = tk.Label(self.root, text = "Login")
-        self.label.pack()
-        self.password_label = tk.Label(self.root, text = "Password")
-        self.password_label.pack()
-        self.password_entry = tk.Entry(self.root)
-        self.password_entry.pack(pady = 5)
-        self.status_label = tk.Label(self.root, text = "")
-        self.status_label.pack()
-        self.button = tk.Button(self.root, text = 'Login', command = self.login)
-        self.button.pack()
-        self.root.mainloop()
-    def _get_device_info(self):
-        return platform.uname()
-
-    def start(self):
-        self.start_time = datetime.now()
-        Session.create(user_id=self.user.id, start_time=self.start_time, ip_address=self.ip_address, device_info=self.device_info)
-
-    def set_user(self, user):
-        self.user = user
-
-    def add_action(self, action, timestamp):
-        self.actions.append((action, timestamp))
-        database.activity_log_table.add_action(self.user, action, timestamp)
-
-    def get_actions(self):
-        return self.actions
-    
-    def close(self):
-        self.end_time = datetime.now()
-        self.add_action("logout", self.end_time)
-        self.save()
-
-
-
-class Main:
-    """handles the main loop of the application
-    creates views and passes them the session manager
-
-    """
-
-    def __init__(self):
-        self.database = Database()
-        self.session = SessionManager()
-        self.login_window = LoginWindow(self)
-
-    def login(self, username, password):
-       ...
-    
-    def register(self, username, password):
-        ...
-    
-
-if __name__ == "__main__":
-    # Initializes and connects to the local SQLite Database.
-    # database = Database()
-    # print(database.connection)
-    # # import_window = ImportWindow()
-    # # export_window = ExportWindow()
-
-    # user = UserModel.create_user("admin", "test", "super_user")
-
-    # activity_log_window = ActivityLogWindow()
-    # # random_password_generator_window = RandomPasswordGeneratorWindow()
-    # database.append_password([1, 'https://google.com', 'username', 'password'])
-    
-    # Check if master password exists.
-    # try:
-    #     # Checks if there is a master password file.
-    #     with open("master_password.txt", mode = "r") as master_password:
-    #         # Checks if the master password file is empty.
-    #         if master_password.read() == "":
-    #             # The file is empty, so there is no master password.
-    #             print("Master password does not exist.")
-    #             register_window = RegisterWindow()
-    #         else:
-    #             # The file probably has a master password, if not, the master password is corrupted.
-    #             login_window = LoginWindow()
-    # except:
-    #     # The file does not exist, so there is no master password.
-    #     print("Master password does not exist.")
-    #     # Creates the master password file.
-    #     with open("master_password.txt", mode = "x"):
-    #         pass
-    #     # Opens the register window.
-    #     register_window = RegisterWindow()
-
-    # path = input("enter ur path")
-    # pe.create(path + ".key")
-    
-    # pm = passwordM()
-    # print(pm.encrypt("ilikecats"))
-    # print(pm.decrypt("ilikecats"))
-    # x = input("filename")
-    # nf = x + ".key"
-    # pm.create(nf)
-    # key = pm.find_key(nf)
-    # print(pm.find_key(nf) ,"hello")
-    # ep = pm.encrypt_in_file("ilike cats", key)
-    # dp = pm.decrypt_in_file("ilike cats", key)
-    # print(ep, "encrypted")
-    # print(dp, "decrypted")
-    database.append_password([1, 'https://google.com', 'username', 'password'])
-    main()
-    pass
-    user = User(username="test1", password="test", role="admin")
-    user.create_table()
-    user.save()
-
-    init_models()
-    try:
-    
-        user = User(username="test1", password="test", role="admin")
-        user.save()
-    except:
-        pass
-        
-    new_user = User.get_all()
-
-    # add activity log
-    activity_log = ActivityLog(user_id=1, action="login", timestamp=datetime.now())
-    activity_log.save()
-
-    #activity window
-    activity_log_window = ActivityLogWindow()
 
     
-    print(new_user)
+
+

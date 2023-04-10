@@ -162,3 +162,4 @@ cython_debug/
 db.sql
 
 .DS_Store
+master_password.txt

@@ -41,8 +41,11 @@ class passwordM:
         return nw
 
     def decrypt(self, password: str) -> str:
+        print(f"Decrypting {password}")
         decrypted = self.encrypt(password)
+        print(f"Decrypted {decrypted}")
         dec = f_key.decrypt(decrypted).decode()
+        print(f"Decrypted2 {dec}")
         return dec
 
 
