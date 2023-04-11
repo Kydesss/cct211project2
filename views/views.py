@@ -258,7 +258,7 @@ class AddPasswordWindow:
         url = self.url_entry.get()
         username = self.username_entry.get()
         password = self.password_entry.get()
-        PasswordVault.add_password(username, password, url)
+        PasswordVault.add_password(url, username, password)
         ActivityLog.log(action=f"Added password for {url} with username {username}")
         self.parent.refresh_tree() # Refresh the tree.
         self.root.destroy()
