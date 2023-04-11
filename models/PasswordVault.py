@@ -44,10 +44,10 @@ class PasswordVault(Model):
         return cls(username=username, password=encrypted_password, url=url)
     
     @classmethod
-    def delete_password(self, id: int):
+    def delete_password(cls, id: int):
         """Deletes a password from the database"""
         query = f"""DELETE FROM passwords WHERE id = {id}"""
-        self._execute_query(query)
+        cls._execute_query(query)
         
     @classmethod
     def import_passwords(cls, passwords: csv):
