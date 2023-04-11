@@ -59,11 +59,7 @@ if __name__ == "__main__":
     database = Database()
     PasswordVault.create_table()
     ActivityLog.create_table()
-    #ADD SOME TEST DATA for activity log and password vault
 
-    PasswordVault.add_password(username="Galad", password="Password", url="test.com")
-    ActivityLog.log(action="test")
-    ActivityLog.log(action="test2")
 
     main()
     database.close()
