@@ -47,9 +47,9 @@ class PasswordVault(Model):
     
     
     @classmethod
-    def delete_password(self):
+    def delete_password(self, id: int):
         """Deletes a password from the database"""
-        query = f"""DELETE FROM passwords WHERE id = {self.id}"""
+        query = f"""DELETE FROM passwords WHERE id = {id}"""
         self._execute_query(query)
         
 
