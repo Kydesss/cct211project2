@@ -61,10 +61,12 @@ class PasswordVault(Model):
         Imports CSV password files from Chrome or Edge.
         """
         csv_reader = csv.reader(passwords)
-
+        list_of_passwords = []
         for row in csv_reader:
+            list_of_passwords.append(row)
+        list_of_passwords.pop(0)
+        for row in list_of_passwords:
             #['name', 'url', 'username', 'password']
-            name= row[0]
             url = row[1]
             username = row[2]
             password = row[3]
