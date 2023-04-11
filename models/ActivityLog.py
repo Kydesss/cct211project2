@@ -5,7 +5,7 @@ from models.base import Model
 class ActivityLog(Model):
     table_name = "activity_logs"
 
-    def __init__(self, id:int=None, session_id:int=None, action:str=None, timestamp:str=datetime.now().strftime("%Y-%m-%d %H:%M:%S")):
+    def __init__(self, id:int=None, action:str=None, timestamp:str=datetime.now().strftime("%Y-%m-%d %H:%M:%S")):
         self.id = id
         self.action = action
         self.timestamp = timestamp
