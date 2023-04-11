@@ -3,10 +3,6 @@ CCT211 Project 2: Password Manager
 Group 19: Joaquin Pacia, Ali Zaidi, Galad Dirie
 """
 import os
-import uuid
-import socket
-import platform
-from datetime import datetime 
 
 from utils.passwordEncrypt import passwordM
 
@@ -20,7 +16,6 @@ def main():
     """
     The main function.
     """
-    directory = os.getcwd()
     # Check if master password exists.
     try:
         # Checks if there is a master password file.
