@@ -70,10 +70,10 @@ BASE_STRING = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#
 # Create encryption key
 
 try:
-    with open(file=directory + "\data\key.txt", mode='rb') as binary_file:
+    with open(file=directory + "\key.txt", mode='rb') as binary_file:
         KEY = binary_file.read()
 except:
-    with open(file=directory + "\data\key.txt", mode='wb') as binary_file:
+    with open(file=directory + "\key.txt", mode='wb') as binary_file:
         KEY = Fernet.generate_key()
         binary_file.write(KEY)
 

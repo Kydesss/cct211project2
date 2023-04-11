@@ -16,7 +16,7 @@ def main():
     # Check if master password exists.
     try:
         # Checks if there is a master password file.
-        with open("./data/master_password.txt", mode = "r") as master_password:
+        with open("master_password.txt", mode = "r") as master_password:
             # Checks if the master password file is empty.
             if master_password.read() == "":
                 # The file is empty, so there is no master password.
@@ -31,7 +31,7 @@ def main():
         # The file does not exist, so there is no master password.
         print("Master password does not exist.")
         # Creates the master password file.
-        with open("./data/master_password.txt", mode = "x"):
+        with open("master_password.txt", mode = "x"):
             ActivityLog.log(action='Master password file created')
         # Opens the register window.
         print("Register window opened.")
@@ -46,10 +46,7 @@ if __name__ == "__main__":
     # random_password_generator_window = RandomPasswordGeneratorWindow()
     # password_window = PasswordWindow()
     # database.append_password([1, 'https://google.com', 'username', 'password'])
-    data_directory = "data"
-
-    if not os.path.exists(data_directory):
-        os.makedirs(data_directory)
+    
     # Main program
     database = Database()
     PasswordVault.create_table()
