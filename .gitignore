@@ -160,3 +160,6 @@ cython_debug/
 #.idea/
 
 db.sql
+
+.DS_Store
+master_password.txt

@@ -1,5 +1,7 @@
 import random
+import os
 from hashlib import sha256
+from cryptography.fernet import Fernet
 
 base_string = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()_+?./<>\'\"[];:{}'
 
@@ -29,24 +31,6 @@ def create_random_password() -> str:
         i += 1
     return password
 
-def encrypt(password: str) -> str:
-    """
-    Encrypts 'password' using our custom encryption algorithm.
-    """
-    encrypted_string = ''
-    for char in password:
-        encrypted_string += encryption_dict[char]
-    return encrypted_string
-
-def decrypt(password: str) -> str:
-    """
-    Decrypts 'password' using our custom encryption algorithm.
-    """
-    decrypted_string = ''
-    for char in password:
-        decrypted_string += decryption_dict[char]
-    return decrypted_string
-
 def hash(master_password: str) -> sha256:
     """
     Secures the master password.
@@ -57,6 +41,7 @@ def verify(master_password: str) -> bool:
     """
     Checks if sha256('master_password') is the same as the locally stored master_password.
     """
-    with open('master_password.txt', 'r') as f:
+    directory = os.getcwd()
+    with open(directory + "/data/master_password.txt", mode = "r") as f:
         stored_master_password = f.read()
     return hash(master_password) == stored_master_password
