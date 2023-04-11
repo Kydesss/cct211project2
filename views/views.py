@@ -220,7 +220,6 @@ class PasswordWindow:
         for i in self.tree.get_children():
             self.tree.delete(i)
         for i in PasswordVault.get_passwords():
-            print(i)
             self.tree.insert("", tk.END, values = (i[0], i[1], i[2], ut.decrypt(password=i[3])))
 
 

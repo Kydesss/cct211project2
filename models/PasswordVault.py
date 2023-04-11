@@ -22,7 +22,6 @@ class PasswordVault(Model):
                 password TEXT NOT NULL,
                 url TEXT NOT NULL
             )"""
-        print(query)
         cls._execute_query(query)
 
     @classmethod
@@ -33,7 +32,6 @@ class PasswordVault(Model):
                 ORDER BY passwords.id DESC
                 """
         result = cls._execute_query(query)
-        print(result)
         return result
     
     @classmethod
@@ -45,16 +43,12 @@ class PasswordVault(Model):
         cls._execute_query(query)
         return cls(username=username, password=encrypted_password, url=url)
     
-    
     @classmethod
     def delete_password(self, id: int):
         """Deletes a password from the database"""
         query = f"""DELETE FROM passwords WHERE id = {id}"""
         self._execute_query(query)
         
-
-    
-
     @classmethod
     def import_passwords(cls, passwords: csv):
         """
@@ -67,8 +61,6 @@ class PasswordVault(Model):
             url = row[1]
             username = row[2]
             password = row[3]
-            
-            
             cls.add_password(url, username, password )
 
     @classmethod
