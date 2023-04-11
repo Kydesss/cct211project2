@@ -33,14 +33,15 @@ class PasswordVault(Model):
                 ORDER BY passwords.id DESC
                 """
         result = cls._execute_query(query)
+        print(result)
         return result
     
     @classmethod
-    def add_password(cls, username, password, url):
+    def add_password(cls, url, username, password):
         """Adds a password to the database"""
         encrypted_password = ut.encrypt(password)
-        query = f"""INSERT INTO passwords ( username, password, url)
-            VALUES ( '{username}', '{encrypted_password}', '{url}')"""
+        query = f"""INSERT INTO passwords ( url, username, password)
+            VALUES ( '{url}', '{username}', '{encrypted_password}')"""
         cls._execute_query(query)
         return cls(username=username, password=encrypted_password, url=url)
     
