@@ -46,7 +46,10 @@ if __name__ == "__main__":
     # random_password_generator_window = RandomPasswordGeneratorWindow()
     # password_window = PasswordWindow()
     # database.append_password([1, 'https://google.com', 'username', 'password'])
+    data_directory = "data"
 
+    if not os.path.exists(data_directory):
+        os.makedirs(data_directory)
     # Main program
     database = Database()
     PasswordVault.create_table()
