@@ -49,6 +49,17 @@ class PasswordVault(Model):
         query = f"""DELETE FROM passwords WHERE id = {id}"""
         cls._execute_query(query)
         
+
+    @classmethod
+    def update_password(cls, id: int, url: str, username: str, password: str):
+        """Updates a password from the database"""
+        encrypted_password = ut.encrypt(password)
+        query = f"""UPDATE passwords SET url = '{url}', username = '{username}', password = '{encrypted_password}' WHERE id = {id}"""
+        cls._execute_query(query)
+        return cls(username=username, password=encrypted_password, url=url) 
+
+    
+
     @classmethod
     def import_passwords(cls, passwords: csv):
         """
