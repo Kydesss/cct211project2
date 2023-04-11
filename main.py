@@ -1,6 +1,6 @@
 """
 CCT211 Project 2: Password Manager
-Group 19: Joaquin Pacia, Ali Zaidi, Galad Dirie
+Group 19: Joaquin Pacia, Ali Zaidi, Galad Dirie, Mohammed Ali
 """
 
 from engine import Database
