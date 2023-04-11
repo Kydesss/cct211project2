@@ -310,7 +310,8 @@ class EditPasswordWindow:
         username = self.username_entry.get()
         password = self.password_entry.get()
         PasswordVault.update(id=id, url=url, username=username, password=password)
-        ActivityLog.log("Edited password for", url, username, password)
+        action = f"Edited password for {url} with username {username}"
+        ActivityLog.log(action)
         self.parent.refresh_tree() # Refresh the tree.
         self.root.destroy()
         print("Password edited.")    
