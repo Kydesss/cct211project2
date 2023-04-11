@@ -1,5 +1,4 @@
 import csv
-import sqlite3
 from models.base import Model
 from utils.passwordEncrypt import passwordM 
 import utils as ut
