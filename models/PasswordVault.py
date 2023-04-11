@@ -1,6 +1,7 @@
 import csv
 from models.base import Model
 import utils as ut
+from tkinter import filedialog
 
 pm = ut.passwordM()
 class PasswordVault(Model):
@@ -67,7 +68,7 @@ class PasswordVault(Model):
             cls.add_password(username, password, url)
 
     @classmethod
-    def export_passwords(cls, dir_name: str):
+    def export_passwords(cls, filename: str):
         """
         Exports CSV password files from Chrome or Edge.
         """
@@ -77,7 +78,7 @@ class PasswordVault(Model):
             
             export.append([password[1], password[1], password[2], ut.decrypt(password[3])])
             
-        with open(file=dir_name, mode='w', newline='') as csv_file:
+        with open(file=filename, mode='w', newline='') as csv_file:
             csv_writer = csv.writer(csv_file)
             csv_writer.writerows(export)
             

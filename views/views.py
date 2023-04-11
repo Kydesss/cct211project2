@@ -16,6 +16,7 @@ from tkinter import ttk, filedialog
 import os
 import utils as ut
 from models import *
+import pandas as pd
 
 
 
@@ -161,7 +162,8 @@ class PasswordWindow:
         PasswordVault.delete_password(id)
         self.refresh_tree()
         print("Password deleted. " + str(entry))
-        ActivityLog.log("Deleted password for", url, username, password)
+        action = "Deleted password for " + url + " with username " + username + " and password " + password
+        ActivityLog.log(action)
     
     def delete_all_passwords(self) -> None:
         """
@@ -184,10 +186,22 @@ class PasswordWindow:
         ActivityLogWindow()
 
     def import_passwords(self):
-        ImportWindow()
+        filename = filedialog.askopenfilename()
+        print('Selected:', filename)
+        with open(file=filename, mode = "r") as csv_file:
+            PasswordVault.import_passwords(csv_file)
+        self.refresh_tree()
+        print("Import successful.")
+        action = "Imported passwords from " + filename
+        ActivityLog.log(action)
 
     def export_passwords(self):
-        ExportWindow()
+        filename = filedialog.asksaveasfile(initialfile = 'local_passwords.csv',
+        defaultextension=".csv", filetypes=[("csv file","*.csv*")])
+        PasswordVault.export_passwords(filename.name)
+        print("Export successful.")
+        action = "Exported passwords to " + filename.name
+        ActivityLog.log(action)
     
     def sign_out(self) -> None:
         """
@@ -244,7 +258,7 @@ class AddPasswordWindow:
         url = self.url_entry.get()
         username = self.username_entry.get()
         password = self.password_entry.get()
-        PasswordVault.add_password(url, username, password)
+        PasswordVault.add_password(username, password, url)
         ActivityLog.log(action=f"Added password for {url} with username {username}")
         self.parent.refresh_tree() # Refresh the tree.
         self.root.destroy()
@@ -376,6 +390,8 @@ class ImportWindow:
         with open(file=filename, mode = "r") as csv_file:
             PasswordVault.import_passwords(csv_file)
         print("Import successful.")
+        action = "Imported passwords from " + filename
+        ActivityLog.log(action)
 
 
 class ExportWindow:
@@ -401,6 +417,8 @@ class ExportWindow:
         PasswordVault.export_passwords(dir_name)
         self.status_label.config(text = "Export successful.")
         print("Export Successful.")
+        action = "Exported passwords to " + dir_name
+        ActivityLog.log(action)
 
 
 # Log Window
