@@ -118,6 +118,6 @@ def verify(password: str) -> bool:
     """
     Checks if sha256('master_password') is the same as the locally stored master_password.
     """
-    with open(file = directory + "\data\master_password.txt", mode='r') as f:
+    with open(file = directory + "\master_password.txt", mode='r') as f:
         master_password = f.read()
     return hash(password) == master_password

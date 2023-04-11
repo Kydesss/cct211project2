@@ -51,7 +51,7 @@ class RegisterWindow:
         Registers a master password.
         """
         password = self.password_entry.get()
-        with open(file = directory + "/data/master_password.txt", mode = "w") as master_password:
+        with open(file = directory + "\master_password.txt", mode = "w") as master_password:
             master_password.write(ut.hash(password))
         self.root.destroy()
         print("Registration successful!")
@@ -86,7 +86,7 @@ class LoginWindow:
         Logs in to the password manager.
         """
         password = self.password_entry.get()
-        with open(file = directory + "\data\master_password.txt", mode = "r"):
+        with open(file = directory + "\master_password.txt", mode = "r"):
             if ut.verify(password):
                 self.root.destroy()
                 print("Login successful!")

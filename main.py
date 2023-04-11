@@ -51,8 +51,6 @@ if __name__ == "__main__":
     database = Database()
     PasswordVault.create_table()
     ActivityLog.create_table()
-
-
     main()
     database.close()
 
