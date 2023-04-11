@@ -13,10 +13,6 @@ class Database:
         self.connection = self.connect()
         print("Database formatted successfully..")
 
-        self.close() #NOTE: This is here to close the connection to the database after formatting it. TEMPORARY FIX
-        
-    
-
     def connect(self):
         """
         Connects to the database.
@@ -26,7 +22,7 @@ class Database:
         try:
             with open(file="db.sql", mode="x"):
                 pass
-            print("Could not find database, creating new database..")
+            print("Creating new database..")
         except:
             print("Existing files found..")
         try:
