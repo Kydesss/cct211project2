@@ -63,10 +63,14 @@ class PasswordVault(Model):
         csv_reader = csv.reader(passwords)
 
         for row in csv_reader:
-            username = row[0]
-            password = ut.encrypt(row[3])
-            url = row[2]
-            cls.add_password(username, password, url)
+            #['name', 'url', 'username', 'password']
+            name= row[0]
+            url = row[1]
+            username = row[2]
+            password = row[3]
+            
+                
+            cls.add_password(url, username, password )
 
     @classmethod
     def export_passwords(cls, filename: str):
