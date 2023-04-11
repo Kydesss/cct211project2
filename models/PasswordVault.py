@@ -1,9 +1,8 @@
 import csv
 from models.base import Model
-from utils.passwordEncrypt import passwordM 
 import utils as ut
 
-pm = passwordM()
+pm = ut.passwordM()
 class PasswordVault(Model):
     table_name = "passwords"
 

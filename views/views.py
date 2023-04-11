@@ -15,7 +15,6 @@ import tkinter as tk
 from tkinter import ttk, filedialog
 import os
 import utils as ut
-from utils.passwordEncrypt import passwordM
 from models import *
 
 
@@ -203,7 +202,7 @@ class PasswordWindow:
         """
         Refreshes the TreeView to update the passwords.
         """
-        pm = passwordM()
+        pm = ut.passwordM()
         for i in self.tree.get_children():
             self.tree.delete(i)
         for i in PasswordVault.get_passwords():
