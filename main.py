@@ -2,9 +2,6 @@
 CCT211 Project 2: Password Manager
 Group 19: Joaquin Pacia, Ali Zaidi, Galad Dirie
 """
-import os
-
-from utils.passwordEncrypt import passwordM
 
 from engine import Database
 from models import *

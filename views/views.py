@@ -16,7 +16,6 @@ from tkinter import ttk, filedialog
 import os
 import utils as ut
 from utils.passwordEncrypt import passwordM
-import pandas as pd
 from models import *
 
 
